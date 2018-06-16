@@ -1,7 +1,6 @@
-package chkrr00k.beans2sql;
+package chkrr00k.sql;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,12 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.soap.util.Bean;
-import org.apache.soap.util.StringUtils;
-
-import chkrr00k.beans.Autore;
-import chkrr00k.beans.Libro;
-import chkrr00k.beans.Persona;
 
 /**
  * 
@@ -47,6 +40,7 @@ public class BeanTranslator {
 		TYPETRANSLATION.put("double", "DOUBLE");
 		TYPETRANSLATION.put("float", "FLOAT");
 		TYPETRANSLATION.put("char", "CHAR");
+		TYPETRANSLATION.put("java.sql.Date", "DATE");
 
 	}
 
@@ -108,7 +102,7 @@ public class BeanTranslator {
 
 		strBld.append(String.join(",\n", iteratorToIterable(fields.stream().map((e) -> {
 			try {
-				return "\t" + e.getKey() + " " + BeanTranslator.TYPETRANSLATION.get(e.getValue());
+				return "\t" + e.getKey() + " " + BeanTranslator.TYPETRANSLATION.get(e.getValue()) + " NOT NULL";
 			} catch (Exception ex) {
 				throw new IllegalArgumentException("Invalid type");
 			}
@@ -125,9 +119,8 @@ public class BeanTranslator {
 			fk.keySet().stream().forEach((e) -> {
 				strBld.append(",\n\tFOREIGN KEY ( ");
 				strBld.append(e);
-				strBld.append(" ) REFERENCES ( ");
+				strBld.append(" ) REFERENCES ");
 				strBld.append(fk.get(e));
-				strBld.append(" )");
 			});
 		}
 		strBld.append("\n)");
@@ -352,5 +345,4 @@ public class BeanTranslator {
 
 		return strBld.toString();
 	}
-
 }

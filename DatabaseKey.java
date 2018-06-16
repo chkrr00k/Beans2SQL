@@ -1,4 +1,4 @@
-package chkrr00k.beans2sql;
+package chkrr00k.sql;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
